@@ -1,0 +1,40 @@
+# Calibre Library Agent v1.2.0
+
+Automates metadata management for a Calibre e-book library, targeting books sourced from Royal Road where authors frequently append status tags, version numbers, and date stamps to titles. Also detects and queues stubbed books for approval.
+
+## What It Does
+
+### Pass 1 — Title Cleaning
+- Connects to a running Calibre instance via the calibredb content server API
+- Runs each title through a regex pre-processor to strip known noise patterns
+- Sends ambiguous titles to a local LLM with author and series context for intelligent judgment
+- Writes cleaned titles back to Calibre without interrupting the running application
+
+### Pass 2 — Stub Detection
+- Reads FanFicFare error output to find books where the web chapter count is significantly lower than your local copy
+- Flags these as stubs and walks you through approving or skipping each overwrite
+- Nothing is overwritten without your explicit approval
+
+## Requirements
+- Python 3.11+
+- Ollama with llama3.2 (`ollama pull llama3.2`)
+- `pip install ollama`
+- Calibre with content server enabled (Preferences → Sharing → Sharing over the net)
+- FanFicFare plugin installed in Calibre
+
+## Setup
+1. Enable Calibre's content server and note the port (default 8080)
+2. Edit the configuration block at the top of `calibre_agent.py`:
+```python
+   CALIBREDB_PATH  = r"C:\Program Files\Calibre2\calibredb.exe"
+   CALIBRE_SERVER  = "http://localhost:8080"
+   FILTER_TAG      = None   # or "Royal Road" to limit scope
+   DRY_RUN         = True
+```
+3. Run with `python calibre_agent.py`
+4. Review output, then set `DRY_RUN = False`
+
+## Using Stub Detection
+1. Run Download/Update on your Royal Road books inside Calibre
+2. When errors appear click **Show Details**
+3. Copy all the error text and paste it into:
