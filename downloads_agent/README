@@ -1,0 +1,31 @@
+# Downloads Cleanup Agent v1.1.0
+
+Recursively scans a Windows Downloads directory and uses a local LLM to triage files as KEEP or JUNK, moving flagged files to a staging folder for human review before anything is permanently deleted.
+
+## What It Does
+- Safe extensions (media, documents, books, game files) are automatically kept without LLM calls
+- Known junk formats (.tmp, .msi, .crdownload, etc.) are flagged instantly without LLM calls
+- Ambiguous files (.exe, .bat, etc.) are sent to the LLM with filename, extension, and size for a verdict and plain-English reason
+- Junk is moved to a `_JUNK_REVIEW` staging folder preserving subfolder structure
+- A full decision log is saved so every choice is transparent and reversible
+- Nothing is permanently deleted — you review the staging folder and delete it yourself when satisfied
+
+## Requirements
+- Python 3.11+
+- Ollama with llama3.2 (`ollama pull llama3.2`)
+- `pip install ollama`
+
+## Setup
+1. Edit the configuration block at the top of `downloads_agent.py`:
+```python
+   DOWNLOADS_DIR = Path(r"C:\Users\YourName\Downloads")
+   STAGING_DIR   = Path(r"C:\Users\YourName\Downloads\_JUNK_REVIEW")
+   DRY_RUN       = True
+```
+2. Run with `python downloads_agent.py`
+3. Review the output and staged files
+4. Set `DRY_RUN = False` when happy with the results
+
+## Changelog
+- **v1.1.0** — Added .msi, .msp, .msu to always-junk extensions
+- **v1.0.0** — Initial release
