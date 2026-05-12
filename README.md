@@ -8,7 +8,6 @@ A growing collection of locally-hosted AI agents built with Python and Ollama to
 |---|---|---|
 | Calibre Library Agent | v1.2.0 | Cleans e-book metadata and handles Royal Road stub detection |
 | Downloads Cleanup Agent | v1.1.0 | Triages Downloads folder using LLM judgment |
-| Gaming Performance Agent | v0.1.0 | Analyzes session logs and recommends settings optimizations |
 
 ## Philosophy
 - **Local first** — everything runs on your own hardware
